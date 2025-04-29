@@ -12,15 +12,25 @@ def get_kospi():
     url = "https://finance.naver.com/sise/sise_index.naver?code=KOSPI"
     res = requests.get(url)
     soup = BeautifulSoup(res.text, 'html.parser')
-    kospi_now = soup.select_one('.no_today .blind').text
-    return float(kospi_now.replace(',', ''))
+    
+    try:
+        kospi_now = soup.select_one('.no_today .blind').text
+        return float(kospi_now.replace(',', ''))
+    except AttributeError:
+        print("코스피 데이터를 가져오는 데 실패했습니다.")
+        return 0.0  # 기본값으로 0.0 반환
 
 def get_kosdaq():
     url = "https://finance.naver.com/sise/sise_index.naver?code=KOSDAQ"
     res = requests.get(url)
     soup = BeautifulSoup(res.text, 'html.parser')
-    kosdaq_now = soup.select_one('.no_today .blind').text
-    return float(kosdaq_now.replace(',', ''))
+    
+    try:
+        kosdaq_now = soup.select_one('.no_today .blind').text
+        return float(kosdaq_now.replace(',', ''))
+    except AttributeError:
+        print("코스닥 데이터를 가져오는 데 실패했습니다.")
+        return 0.0  # 기본값으로 0.0 반환
 
 def calculate_score(kospi, kosdaq):
     score_kospi = 0
